@@ -1,32 +1,36 @@
 package Ehb.Project.Luchthaven;
 
+import java.util.Scanner;
 
-
-public class LuchthavenTester {
+public class Luchthaven {
     public static void main(String[] args) {
-        
-
-       // vlucht aanmaken
+        Scanner scanner = new Scanner(System.in);
+//methode of functie gebruikt om binnen applicatie te kunnen herbruiken en terug kan sturen.
+//vlucht aanmaken met de inhoud van de class vlucht zelf
         Vlucht vlucht = new Vlucht("FL123", "Brussel", "Parijs", 2, 1);
         vlucht.toonVluchtInfo();
-
-        // passagiers toevoegen
-        Passagiers passagier1 = new Passagiers("Jan Janssen", 30, "Brussel", 10.0);
-        vlucht.voegPassagierToe(passagier1, "Parijs", "Economy");
-
-        Passagiers passagier2 = new Passagiers("Lisa Peeters", 25, "Antwerpen", 12.0);
-        vlucht.voegPassagierToe(passagier2, "Parijs", "Business");
-
-
-        Personeelslids piloot = new Personeelslids("Captain Marvel", 45, "Sky City", "Piloot");
-        vlucht.voegPersoneelToe(piloot);
+//personeel aanmaken met de inhoud van de class personeelslids
+        vlucht.voegPersoneelToe(new Personeelslids("Fred VanHaven", 45, "Leuven", "Piloot"));
+        vlucht.voegPersoneelToe(new Personeelslids("Anna VanHouwere", 35, "Luchtvaartlaan", "Stewardess"));
 
         vlucht.voerFlightCheckUit();
+//vermelden als er personeel zijn dat dit mag opstijgen en print dit af
+        if (vlucht.kanOpstijgen()) {
+            System.out.println("De vlucht is klaar om op te stijgen.");
+        }
+//uit te kunnen printen zoals hier onder de naam, welke klasse, en begagegewicht
+        System.out.println("Voer de naam van de passagier in:");
+        //scanner gebruik om input te kunnen lezen vooral ook de volgende lijn.
+        String ticketNaam = scanner.nextLine();
+        System.out.println("Kies klasse (Economy of Business):");
+        String klasse = scanner.nextLine();
+        System.out.println("Voer bagagegewicht in (kg):");
 
+        double bagageGewicht = scanner.nextDouble();
 
-        vlucht.kanOpstijgen();
+// voor extra passagier die worden toegevoegd of ingevuld
+        vlucht.voegPassagierToe(new Passagiers(ticketNaam, 0, "/", bagageGewicht, true), vlucht.getAankomstBestemming(), klasse);
 
-
-        vlucht.toonVluchtInfo();
+        vlucht.VluchtPassagiers();
     }
 }
