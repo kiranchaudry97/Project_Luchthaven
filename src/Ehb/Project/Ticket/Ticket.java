@@ -1,11 +1,18 @@
-package Ehb.Project.Luchthaven;
+package Ehb.Project.Ticket;
 
+
+import Ehb.Project.Vlucht.Vlucht;
+import Ehb.Project.Persoon.Passagiers;
 
 public class Ticket {
 
-    // beschrijving:
-    // Datatypes gebruiken om een ticket aan te maken voor passagier met de inhoud van ,
-    // vlucht en klasse.
+/**
+* beschrijving:
+*  Datatypes gebruiken om een ticket aan te maken voor passagier met de inhoud van ,
+* vlucht en klasse.
+* private Passagiers passagier;
+*/
+
     private Passagiers passagier;
     private Vlucht vlucht;
     private String klasse; // Economy of Business
@@ -16,7 +23,6 @@ public class Ticket {
         this.vlucht = vlucht;
         this.klasse = klasse;
     }
-    // getters gebruikt om ze te laten kunnen lezen en wijzingen en capsuleren
     public Passagiers getPassagier() {
         return passagier;
     }
@@ -29,7 +35,6 @@ public class Ticket {
         return klasse;
     }
 
-    // overide
     @Override
     public String toString() {
         return "Ticket{" +
@@ -40,3 +45,7 @@ public class Ticket {
     }
 }
 
+/**
+ * @author Chaud-ry Kiran
+ * @project programming Advanced - Luchthaven
+ */
