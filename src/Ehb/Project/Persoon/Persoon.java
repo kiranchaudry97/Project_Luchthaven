@@ -1,41 +1,38 @@
 package Ehb.Project.Persoon;
 
 public class Persoon {
-/**
-* Beschrijving:
-* public gebruikt om class te kunnen verwerken in de project zelf.
-* Class aangemaakt voor Persoon
-* Datatypes gebruiken om een persoon met de inhoud van
-* naam, leeftijd, adres.
-* Gebruik maken van private om binnen de klasse te kunnen verwerken .
-*/
     private String naam;
     private int leeftijd;
-    private String adres;
-
-/**
-* public gebruikt om class te kunnen verwerken in de project zelf.
- */
-
-    public Persoon(String naam, int leeftijd, String adres) {
+    /** enkel de naam wordt gelezen */
+    public Persoon(String naam) {
         this.naam = naam;
         this.leeftijd = leeftijd;
-        this.adres = adres;
+    }
+    /** stuurt de naam terug*/
+    public String getNaam() {
+        return naam;
     }
 
-    public String getNaam() {
-        return naam; }
-
     public int getLeeftijd() {
-        return leeftijd; }
+        return leeftijd;
+    }
 
-    public String getAdres() {
-
-        return adres;
+    public static class Passagiers extends Persoon {
+        private final double bagageGewicht;
+        /** extend toegevoegd en te kunnen verwerken met de passagiers */
+        public Passagiers(String naam, double bagageGewicht) {
+            super(naam);
+    /** bagage gewicht van de passagiers */
+            this.bagageGewicht = bagageGewicht;
+        }
+        /** stuurt terug het bagagegewicht van de passagier **/
+        public double getBagageGewicht() {
+            return bagageGewicht;
+        }
     }
 }
 
 /**
  * @author Chaud-ry Kiran
- * @project programming Advanced - Luchthaven
+ *  programming Advanced - Luchthaven
  */

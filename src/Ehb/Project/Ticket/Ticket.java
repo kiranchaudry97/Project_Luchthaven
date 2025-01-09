@@ -1,29 +1,22 @@
 package Ehb.Project.Ticket;
 
-
+import Ehb.Project.Klasse.Klasse;
+import Ehb.Project.Persoon.Persoon;
 import Ehb.Project.Vlucht.Vlucht;
-import Ehb.Project.Persoon.Passagiers;
 
-public class Ticket {
+// Ticket Klasse
+class Ticket {
+    private final Persoon.Passagiers passagier;
+    private final Vlucht vlucht;
+    private final Klasse klasse;
 
-/**
-* beschrijving:
-*  Datatypes gebruiken om een ticket aan te maken voor passagier met de inhoud van ,
-* vlucht en klasse.
-* private Passagiers passagier;
-*/
-
-    private Passagiers passagier;
-    private Vlucht vlucht;
-    private String klasse; // Economy of Business
-
-
-    public Ticket(Passagiers passagier, Vlucht vlucht, String klasse) {
+    public Ticket(Persoon.Passagiers passagier, Vlucht vlucht, Klasse klasse) {
         this.passagier = passagier;
         this.vlucht = vlucht;
         this.klasse = klasse;
     }
-    public Passagiers getPassagier() {
+
+    public Persoon.Passagiers getPassagier() {
         return passagier;
     }
 
@@ -31,7 +24,7 @@ public class Ticket {
         return vlucht;
     }
 
-    public String getKlasse() {
+    public Klasse getKlasse() {
         return klasse;
     }
 

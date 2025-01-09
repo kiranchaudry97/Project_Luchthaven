@@ -1,159 +1,87 @@
 package Ehb.Project.Vlucht;
 
+import Ehb.Project.Klasse.Klasse;
+import Ehb.Project.Persoon.Personeelslid;
+import Ehb.Project.Persoon.Persoon;
 
-import Ehb.Project.Persoon.Passagiers;
-import Ehb.Project.Persoon.Personeelslids;
-
+import java.io.BufferedWriter;
 import java.io.FileWriter;
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.Scanner;
+import java.util.EnumMap;
+import java.util.HashSet;
+import java.util.Map;
+import java.util.Set;
 
-
-
-
+/**
+ * Beschrijving:
+ * Een vlucht met passagiers, personeel en beschikbare plaatsen.
+ * Biedt methoden om personen toe te voegen en te controleren of de vlucht kan opstijgen.
+ */
 public class Vlucht {
-    /**
-     *  klasse vlucht aangemaakt met het gebruik van de character en zie de inhoud.
-     *  private gebruik om binnen klassen te verwerken.
-     *   methode gebruik zoals true en false aan te kunnen geven.
-     */
-
-    private String vluchtcode, vertrekBestemming, aankomstBestemming;
-
-    private int economyPlaatsen, businessPlaatsen;
-
+    private final String vluchtcode;
+    private final String vertrek;
+    private final String bestemming;
+    private final int maxPassagiers;
+    private final Map<Klasse, Integer> beschikbarePlaatsen = new EnumMap<>(Klasse.class);
+    private final Set<Persoon.Passagiers> passagiers = new HashSet<>();
+    private final Set<Personeelslid> personeel = new HashSet<>();
+    private static final double MAX_BAGAGEGEWICHT = 20.0;
     private boolean flightCheckUitgevoerd = false;
 
-
     /**
-     *  MAX gebruikt om maximale waarde te kunnen geven van de bagage, om de waarde vast te stellen is dit 20 gebruik te maken van final.
-     *  Array gebruikt om de verzameling van de passsagiers en personeel toe te voegen als extra.
+     * Constructor voor het aanmaken van een vlucht.
      */
-
-
-    private final double MAX_BAGAGEGEWICHT = 20.0;
-
-    private ArrayList<Passagiers> passagiers = new ArrayList<>();
-    private ArrayList<Personeelslids> personeel = new ArrayList<>();
-
-
- /**
-  *  public gebruikt om toegang van andere klassen.
-  *  vlucht klasse een naam gegeven van de constructor.
-  *  de lijsten aangegeven.
-  *  this gebruikt met de object.
- */
-
-    public Vlucht(String vluchtcode, String vertrekBestemming, String aankomstBestemming, int economyPlaatsen, int businessPlaatsen) {
+    public Vlucht(String vluchtcode, String vertrek, String bestemming, int maxEconomy, int maxBusiness) {
         this.vluchtcode = vluchtcode;
-        this.vertrekBestemming = vertrekBestemming;
-        this.aankomstBestemming = aankomstBestemming;
-        this.economyPlaatsen = economyPlaatsen;
-        this.businessPlaatsen = businessPlaatsen;
+        this.vertrek = vertrek;
+        this.bestemming = bestemming;
+        this.maxPassagiers = maxEconomy + maxBusiness;
+        beschikbarePlaatsen.put(Klasse.ECONOMY, maxEconomy);
+        beschikbarePlaatsen.put(Klasse.BUSINESS, maxBusiness);
     }
 
     /**
-     * get en return gebruikt om deze methode terug aantwoord kan geven soort aanroeping.
-     *
+     * Voeg een personeelslid toe aan de vlucht.
      */
-    public String getAankomstBestemming() {
-
-        return aankomstBestemming;
+    public void voegPersoneelslidToe(Personeelslid personeelslid) {
+        personeel.add(personeelslid);
+        System.out.println(personeelslid.getNaam() + " toegevoegd als " + personeelslid.getFunctie());
     }
 
     /**
-     *
-     * dat je deze set kan wijzigen
+     * Voeg een passagier toe aan de vlucht.
      */
-    public void setAankomstBestemming(String aankomstBestemming) {
-        this.aankomstBestemming = aankomstBestemming;
-    }
-
-    /**
-     * if gebruikt een van de voorwaarde ongeldig is.
-     * of operator gebruikt,
-     * teksten negeren met hoofdletters of kleine letters., de limiet van de bagage
-     * stop zetten van de uitvoering.
-     */
-    public void voegPassagierToe(Passagiers passagier, String bestemming, String klasse) {
-        if (!aankomstBestemming.equalsIgnoreCase(bestemming) || passagier.getBagageGewicht() > MAX_BAGAGEGEWICHT) {
-            System.out.println("Ongeldige bestemming of te zware bagage.");
+    public void voegPassagierToe(Persoon.Passagiers passagier, Klasse klasse) {
+        if (passagiers.size() >= maxPassagiers) {
+            System.out.println("Maximaal aantal passagiers bereikt.");
             return;
         }
-
-/**
- * 89 tot 111: switch case gebruikt om meerdere variable te kunnen gebruiken en te kunnen vergelijken.
- * , de hoofdletters worden genegeerd
- * 113: voor ongeldige invoer
- *  ingevoegd of afgetrokken van passagier, plaatsen van business en economy
-  */
-
-        switch (klasse.toLowerCase()) {
-            case "business":
-                if (businessPlaatsen > 0) {
-                    businessPlaatsen--;
-                    passagiers.add(passagier);
-                    System.out.println(passagier.getNaam() + " toegevoegd aan Business Class.");
-                } else {
-                    System.out.println("Geen beschikbare plaatsen in Business Class.");
-                }
-                break;
-
-            case "economy":
-                if (economyPlaatsen > 0) {
-                    economyPlaatsen--;
-                    passagiers.add(passagier);
-                    System.out.println(passagier.getNaam() + " toegevoegd aan Economy Class.");
-                } else {
-                    System.out.println("Geen beschikbare plaatsen in Economy Class.");
-                }
-                break;
-
-            default:
-                System.out.println("Ongeldige klasse. Kies 'business' of 'economy'.");
+        if (passagier.getBagageGewicht() > MAX_BAGAGEGEWICHT) {
+            System.out.println("Bagagegewicht te zwaar: maximaal " + MAX_BAGAGEGEWICHT + " kg.");
+            return;
         }
-    }
-
-    public void voegPersoneelToe(Personeelslids personeelslid) {
-/**
-* conditie operator gebruikt om false te geven, en geen waarde doorgeven gebruik maken van if en else statement.
-*  en dat dit niet nul mag zijn.
- * if en else statement gebruikt om deze waarde waar of niet waar aan te geven.
-*/
-
-
-
-        if (personeelslid != null) {
-            personeel.add(personeelslid);
-            System.out.println(personeelslid.getNaam() + " toegevoegd als " + personeelslid.getFunctie());
+        if (beschikbarePlaatsen.get(klasse) > 0) {
+            passagiers.add(passagier);
+            beschikbarePlaatsen.put(klasse, beschikbarePlaatsen.get(klasse) - 1);
+            System.out.println(passagier.getNaam() + " is toegevoegd aan de " + klasse + " klasse.");
         } else {
-            System.out.println("Fout: Personeelslid mag niet null zijn.");
+            System.out.println("Geen beschikbare plaatsen in " + klasse + " klasse.");
         }
     }
 
     /**
-     * vermelden Als er geen piloot of steward zijn dat dit niet mag opstijgen,
-     *dat minstens een persoon aanwezig zijn die door de lijst controleert.
+     * Voer een flightcheck uit.
      */
     public void voerFlightCheckUit() {
-        //
-        flightCheckUitgevoerd = personeel.stream().anyMatch(p -> "Piloot".equalsIgnoreCase(p.getFunctie()));
-        System.out.println(flightCheckUitgevoerd ? "Flightcheck succesvol uitgevoerd." : "Geen piloot voor flightcheck.");
+        this.flightCheckUitgevoerd = true;
+        System.out.println("Flightcheck uitgevoerd.");
     }
 
     /**
-     * if controleert de flight check die niet uitgevoerd is.
-     * geeft een foutmelding aan en wordt terug gestuurd.
-     * controleert of personeel aanwezig zijn, bij foutmelding vemerld.
-     * dit tenzij ze niet aanwezig zijn door false gebruiken.
-     * tenzij ze aanwezig zijn mogen ze vertrekken.
+     * Controleer of de vlucht kan opstijgen.
      */
-
     public boolean kanOpstijgen() {
-
         if (!flightCheckUitgevoerd) return foutmelding("Flightcheck niet uitgevoerd.");
-
 
         if (personeel.stream().noneMatch(p -> "Piloot".equalsIgnoreCase(p.getFunctie())))
             return foutmelding("Geen piloot aanwezig.");
@@ -164,208 +92,50 @@ public class Vlucht {
         return true;
     }
 
-
     private boolean foutmelding(String boodschap) {
         System.out.println(boodschap);
         return false;
     }
 
     /**
-     * lijst met passagiers en personeel aangemaakt met de inhoud
-     * voor ze kunnen printen.
+     * Toon informatie over de vlucht.
      */
     public void toonVluchtInfo() {
-        System.out.println("Vluchtinformatie:");
-        System.out.println("Vluchtcode: " + vluchtcode);
-        System.out.println("Vertrek: " + vertrekBestemming);
-        System.out.println("Aankomst: " + aankomstBestemming);
-        System.out.println("Economy plaatsen: " + economyPlaatsen);
-        System.out.println("Business plaatsen: " + businessPlaatsen);
-
-        toonLijst("Passagiers", passagiers.stream()
-                .map(p -> p.getNaam() + " (" + p.getBagageGewicht() + " kg)").toArray());
-
-        toonLijst("Personeel", personeel.stream()
-                .map(p -> p.getNaam() + " (" + p.getFunctie() + ")").toArray());
+        System.out.println("Vlucht: " + vluchtcode);
+        System.out.println("Van: " + vertrek + " Naar: " + bestemming);
+        System.out.println("Beschikbare plaatsen: " + beschikbarePlaatsen);
+        System.out.println("Passagiers: " + passagiers.size() + "/" + maxPassagiers);
+        System.out.println("Personeel: " + personeel.size());
+        passagiers.forEach(p -> System.out.println("Passagier: " + p.getNaam() + ", Bagagegewicht: " + p.getBagageGewicht() + " kg"));
     }
 
     /**
-     *
-     *als de lijst geen passagier aanwezig zijn dat de lijst leeg
-     * for loop gebruikt.
-     * de object list van de array.
-     * lengt gebruikt en operator --> dit betekent dat de lijst leeg is.
+     * passagiersgegevens opslaan in een bestand.
      */
-    private void toonLijst(String titel, Object[] lijst) {
-        System.out.print(titel + ": ");
-        if (lijst.length == 0) System.out.println("Geen " + titel.toLowerCase() + " aan boord.");
-        else for (Object item : lijst) System.out.print(item + ", ");
-        System.out.println();
-    }
-
-    public void voegPassagiersAutomatischToe() {
-/**
-* Scanner gebruiken voor gebruikersinvoer.
-*/
-        Scanner scanner = new Scanner(System.in);
-
-/**
-*   While-loop voor continue passagiersinvoer.
-*/
-
-        while (true) {
-/**
-*  passagiers naam in te voeren, en dat de scanner dit leest.
-*/
-            System.out.println("Voer de naam van de passagier in (of druk op Enter om te stoppen):");
-            String naam = scanner.nextLine().trim();
-
-/**
-*  226: Stopt de loop als de naam leeg is.
-*/
-
-            if (naam.isEmpty()) {
-                System.out.println("Passagier-invoer gestopt.");
-                break;
-            }
-/**
- *
- */
-
-/**
- * lus gebruikt dat ze blijven doorgaan voor de klasse.
- * dat de scanner dit leest die je invoert
- * de vergelijkingen negeert met de hoofdletters
- * break stop de lus.
- */
-            String klasse;
-            while (true) {
-                System.out.println("Kies klasse (Economy of Business):");
-                klasse = scanner.nextLine().trim();
-
-                if (klasse.equalsIgnoreCase("Economy") || klasse.equalsIgnoreCase("Business")) {
-                    break;
-                } else {
-                    System.out.println("Ongeldige klasse. Kies 'Economy' of 'Business'.");
-                }
-            }
-
-/**
- * vraagt om naar bagage gewicht, de invoert naar double omzetten
- * als dit negatief is moet je opnieuw invoeren en breekt de lus, vermeld foutmelding.
- * catch, gebruikt voor foutieve nummer van de waarde die niet geld.
-  */
-            double bagageGewicht = 0;
-            while (true) {
-                System.out.println("Voer bagagegewicht in (kg):");
-                String bagageInput = scanner.nextLine().trim();
-                try {
-                    bagageGewicht = Double.parseDouble(bagageInput);
-                    if (bagageGewicht >= 0) {
-                        break;
-                    } else {
-                        System.out.println("Bagagegewicht mag niet negatief zijn. Probeer opnieuw.");
-                    }
-                } catch (NumberFormatException e) {
-                    System.out.println("Ongeldige invoer. Voer een numerieke waarde in voor bagagegewicht.");
-                }
-            }
-/**
- *  voegt vooral de passagier toe,
- * 280 en dat dit succesvol is toegevoed is.
- * met de inhoud van de passagiers er bij de vlucht.
-  */
-
-            voegPassagierToe(new Passagiers(naam, 30, "/", bagageGewicht, true), aankomstBestemming, klasse);
-
-
-            System.out.println(" Passagier '" + naam + "' succesvol toegevoegd aan " + klasse + " Class.");
-        }
-    }
-
-
-    public void VluchtPassagiers() {
-
-/**
-*   om de gevegevens te kunne opslaan van de passagiers en hun vlucht.
-*/
+    public void slaPassagiersOp() {
         String bestandspad = "C:\\Users\\admin\\IdeaProjects\\Project_Luchthaven\\files\\" + vluchtcode + ".txt";
 
-        try (FileWriter writer = new FileWriter(bestandspad)) {
-/**
-*  Schrijft de vluchtinformatie naar het bestand \n voor nieuw wit regel
-*/
+        try (BufferedWriter writer = new BufferedWriter(new FileWriter(bestandspad))) {
             writer.write("----- Passagierslijst voor vlucht: " + vluchtcode + " -----\n");
 
-/**
- * drukt af naar console.
-  */
-            System.out.println("\n----- Passagierslijst voor vlucht: " + vluchtcode + " -----");
-
-            // Vermelden als er geen passagiers aan boord zijn
             if (passagiers.isEmpty()) {
-                String melding = "Geen passagiers aan boord.\n";
-                writer.write(melding); // Schrijf naar bestand
-                System.out.print(melding); // Print naar console
+                String melding = "Geen passagiers aan boord.";
+                writer.write(melding);
+                System.out.print(melding);
             } else {
-
-                for (Passagiers p : passagiers) {
-
-                    String klasse = bepaalKlasse(p);
-/**
- *  Maakt een string met passagiersinformatie inclusief klasse, vertrek en bestemming
- */
-
-                    String passagierInfo = "Naam: " + p.getNaam() +
-                            ", Bagagegewicht: " + p.getBagageGewicht() + " kg" +
-                            ", Klasse: " + klasse +
-                            ", Vertrek: " + vertrekBestemming +
-                            ", Bestemming: " + aankomstBestemming + "\n";
-/**
-*  Schrijf de passagiersinformatie naar het bestand.
-*/
+                for (Persoon.Passagiers passagier : passagiers) {
+                    String passagierInfo = "Naam: " + passagier.getNaam() +
+                            ", Bagagegewicht: " + passagier.getBagageGewicht() + " kg" +
+                            ", Vertrek: " + vertrek +
+                            ", Bestemming: " + bestemming + "\n";
                     writer.write(passagierInfo);
-/**
- *  toon dezelfde informatie op de console.
- */
-
                     System.out.print(passagierInfo);
                 }
             }
-/**
- *  Printen om te tonen dat de lijst succesvol is opgeslagen
-  */
-            String bevestiging = "Passagierslijst opgeslagen in: " + bestandspad + "\n";
-            System.out.println(bevestiging);
+
+            System.out.println("Passagierslijst opgeslagen in: " + bestandspad);
         } catch (IOException e) {
-/**
-*  vooral als je fout misloopt in het bestand dat dit waarschuwt
- * om ze te kunnen vermelden dat er een probleem is.
-*/
-            System.out.println(" Fout bij het opslaan: " + e.getMessage());
+            System.out.println("Fout bij het opslaan van passagierslijst: " + e.getMessage());
         }
-    }
-
-    /**
-     *
-     *  passagier controleert of ze aanwezig zijn, bij de beschikbare plaatsen.
-     *  als de passgiers niet in lijst staat wordt dit onbekend.
-     */
-
-    private String bepaalKlasse(Passagiers passagier) {
-        if (passagiers.contains(passagier)) {
-
-            if (businessPlaatsen < economyPlaatsen) {
-                return "Business";
-            } else {
-                return "Economy";
-            }
-        }
-        return "Onbekend";
     }
 }
-
-/**
- * @author Chaud-ry Kiran
- *  programming Advanced - Luchthaven
- */
