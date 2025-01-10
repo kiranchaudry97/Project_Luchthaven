@@ -1,22 +1,39 @@
 package Ehb.Project.Persoon;
 
 public class Personeelslid extends Persoon {
+    /** Attributen */
     private final String functie;
 
-    /** extend gebruikt met de verwerking van persoon samen te kunnen stellen.
-     * info van de personeelslid.*/
-
+    /**
+     * Constructor voor Personeelslid
+     *
+     */
     public Personeelslid(String naam, String functie) {
         super(naam);
         this.functie = functie;
     }
-    /** constructor van maken met deze inhoud */
+
+    /**
+     * Haalt de functie van het personeelslid op.
+     *
+     */
     public String getFunctie() {
         return functie;
     }
-}
 
-/**
- * @author Chaud-ry Kiran
- *  programming Advanced - Luchthaven
- */
+    /**
+     * Geeft een stringrepresentatie van het personeelslid.
+     * string met naam en functie
+     */
+    @Override
+    public String toString() {
+        return "Personeelslid{" +
+                "naam=" + getNaam() +
+                ", functie='" + functie + '\'' +
+                '}';
+    }
+
+    public boolean getNaam() {
+        return false;
+    }
+}
