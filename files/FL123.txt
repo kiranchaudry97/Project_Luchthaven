@@ -1,3 +1,4 @@
 ----- Passagierslijst voor vlucht: FL123 -----
 Van: Brussel Naar: Parijs
 Naam: ik, Bagagegewicht: 14.0 kg, Klasse: ECONOMY
+Naam: Kiran Chaud-ry, Bagagegewicht: 15.0 kg, Klasse: ECONOMY
