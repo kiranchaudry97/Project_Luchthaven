@@ -1,2 +1,3 @@
 ----- Passagierslijst voor vlucht: FL123 -----
-Naam: kiran khan, Bagagegewicht: 10.0 kg
+Van: Brussel Naar: Parijs
+Naam: ik, Bagagegewicht: 14.0 kg, Klasse: ECONOMY

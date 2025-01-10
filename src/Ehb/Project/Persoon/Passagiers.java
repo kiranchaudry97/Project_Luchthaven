@@ -44,6 +44,11 @@ public class Passagiers {
      * @return string met naam en bagagegewicht
      */
     @Override
+    public int hashCode() {
+        return naam.hashCode();
+    }
+
+    @Override
     public String toString() {
         return "Naam: " + naam + ", Bagagegewicht: " + bagageGewicht + " kg";
     }
